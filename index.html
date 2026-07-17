@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الزر الهارب</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f0f2f5;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+        }
+
+        .container {
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        #runaway-btn {
+            padding: 15px 30px;
+            font-size: 18px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            position: relative; /* يبدأ بوضع نسبي */
+            transition: all 0.2s ease-out; /* حركة ناعمة وسريعة */
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            font-weight: bold;
+            outline: none;
+        }
+
+        #runaway-btn:hover {
+            background-color: #0056b3;
+        }
+
+        #message {
+            margin-top: 20px;
+            font-size: 1.2rem;
+            color: #e74c3c;
+            height: 30px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>جرب أن تضغط على الزر!</h1>
+        <button id="runaway-btn">امسكني إن استطعت</button>
+        <div id="message">لا يمكنك مسكي! 😜</div>
+    </div>
+
+    <script>
+        const btn = document.getElementById('runaway-btn');
+        const messageDiv = document.getElementById('message');
+        let isFixed = false; // متغير لمعرفة ما إذا كان الزر قد علق في مكان ما
+
+        // دالة لتحريك الزر إلى مكان عشوائي
+        function moveButton() {
+            if (isFixed) return;
+
+            // نحصل على أبعاد النافذة والزر
+            const windowWidth = window.innerWidth;
+            const windowHeight = window.innerHeight;
+            const btnWidth = btn.offsetWidth;
+            const btnHeight = btn.offsetHeight;
+
+            // حساب حدود جديدة عشوائية مع ترك هامش حتى لا يخرج الزر من الشاشة
+            const maxX = windowWidth - btnWidth - 20;
+            const maxY = windowHeight - btnHeight - 20;
+
+            const randomX = Math.floor(Math.random() * maxX);
+            const randomY = Math.floor(Math.random() * maxY);
+
+            // تغيير وضع الزر إلى fixed ليتحرك بحرية في الصفحة
+            btn.style.position = 'fixed';
+            btn.style.left = randomX + 'px';
+            btn.style.top = randomY + 'px';
+
+            // إظهار رسالة ساخرة
+            showMessage();
+        }
+
+        function showMessage() {
+            messageDiv.style.opacity = '1';
+            setTimeout(() => {
+                messageDiv.style.opacity = '0';
+            }, 800);
+        }
+
+        // حدث عند مرور الماوس فوق الزر (Hover)
+        btn.addEventListener('mouseover', moveButton);
+        
+        // حدث عند اقتراب الماوس (لللمس أو الشاشات التي تدعم ذلك)
+        btn.addEventListener('mouseenter', moveButton);
+
+        // في حالة نجاح المستخدم بالضغط (نادر جداً لكن ممكن إذا كان بطيئاً)
+        btn.addEventListener('click', () => {
+            alert('واو! لقد أمسكت بي! 🎉\nأعد تحميل الصفحة للمحاولة مرة أخرى.');
+            isFixed = true;
+            btn.textContent = "تم الإمساك بي";
+            btn.style.backgroundColor = "#28a745";
+            btn.style.position = "relative";
+            btn.style.left = "auto";
+            btn.style.top = "auto";
+        });
+    </script>
+</body>
+</html>
